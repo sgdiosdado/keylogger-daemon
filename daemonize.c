@@ -8,32 +8,35 @@ static void daemonize()
 {
     pid_t process_id = 0;
     pid_t sid = 0;
-    // Create child process
+    //change file creation mask
+    umask(0);
+    //clone process
     process_id = fork();
-    // Indication of fork() failure
+    
     if (process_id < 0)
     {
-        printf("fork failed!\n");
-        // Return failure in exit status
+        printf("Failed to fork\n");
+        
         exit(1);
     }
-    // PARENT PROCESS. Need to kill it.
+    // Kill parent
     if (process_id > 0)
     {
-        printf("process_id of child process %d \n", process_id);
-        // return success in exit status
+        //print pid
+        printf("Pid: %d \n", process_id);
+        
         exit(0);
     }
-    //unmask the file mode
-    umask(0);
-    //set new session
+    //Initialize new working session 
     sid = setsid();
     if (sid < 0)
     {
-        // Return failure
+        
         exit(1);
     }
+    //move to root directory
     chdir("/");
+    //close parent stdin stdout stderr
     close(STDIN_FILENO);
     close(STDOUT_FILENO);
     close(STDERR_FILENO);
